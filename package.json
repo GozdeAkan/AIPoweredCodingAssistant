@@ -3,7 +3,7 @@
   "displayName": "ai-ex",
   "publisher": "gozdeeakan",
   "description": "An AI-powered extension to generate, refactor, and improve code directly in Visual Studio Code.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },

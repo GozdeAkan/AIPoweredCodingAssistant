@@ -20,6 +20,19 @@ export class CustomSidebarProvider implements vscode.WebviewViewProvider {
                 this._context.globalState.update('selectedModel', message.model);
             }
         });
+
+        webviewView.onDidChangeVisibility(() => {
+            if (webviewView.visible) {
+                webviewView.webview.postMessage({
+                    command: "loadStoredValues",
+                    ollamaUrl: this._context.globalState.get('ollamaUrl', ''),
+                    selectedModel: this._context.globalState.get('selectedModel', '')
+                });
+            }
+        });
+    
+      
+    
     }
 
     getHtmlContent(): string {
@@ -119,6 +132,15 @@ export class CustomSidebarProvider implements vscode.WebviewViewProvider {
 
             <script>
                 const vscode = acquireVsCodeApi();
+                window.addEventListener("message", (event) => {
+                if (event.data.command === "loadStoredValues") {
+                    document.getElementById("serverUrl").value = event.data.ollamaUrl || "";
+                    document.getElementById("modelDropdown").value = event.data.selectedModel || "";
+                    if(event.data.ollamaUrl){
+                        fetchModels(event.data.ollamaUrl);
+                    }
+                }
+            });
                 let savedUrl = "";
 
                 document.getElementById('saveButton').addEventListener('click', () => {
